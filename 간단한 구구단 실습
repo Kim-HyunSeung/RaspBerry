@@ -1,0 +1,27 @@
+import RPi.GPIO as GPIO
+import time
+from RPi_I2C_LCD_driver import RPi_I2C_driver
+
+lcd = RPi_I2C_driver.lcd(0x27)
+lcd.clear()
+
+GPIO.setmode(GPIO.BCM)
+
+
+
+
+try:
+	while True:
+		lcd.print("")
+		for i in range(2,10):
+			for j in range(1,10):
+				multiple = i * j
+				lcd.setCursor(5,0)
+				lcd.print("gugudan")
+				lcd.setCursor(0,1)
+				lcd.print("{0:3} x{1:3} ={2:3} ".format(i,j,multiple))
+				time.sleep(0.5)
+			print("\n")
+
+except KeyboardInterrupt:
+	GPIO.cleanup()

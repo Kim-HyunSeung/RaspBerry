@@ -1,0 +1,64 @@
+import RPi.GPIO as GPIO
+import time
+import sys, termios, tty, os
+
+piezoPin = 13
+
+A = 524
+B = 588
+C = 660
+D = 699
+E = 784
+F = 880
+G = 988
+H = 1047
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+
+GPIO.setup(piezoPin,GPIO.OUT)
+Buzz = GPIO.PWM(piezoPin,1000)
+
+def buzz_Freq(Piano):
+	Buzz.ChangeFrequency(Piano)
+	time.sleep(0.3)
+	Buzz.stop()
+
+def getch():
+	fd = sys.stdin.fileno()
+	old_settings = termios.tcgetattr(fd)
+	try:
+		tty.setraw(sys.stdin.fileno())
+		ch = sys.stdin.read(1)
+	finally:
+		termios.tcsetattr(fd,termios.TCSADRAIN,old_settings)
+	return ch
+
+
+
+
+try:
+	while True:
+		key = getch()
+		Buzz.start(50) #PWM start
+		if(key == '1'):
+			buzz_Freq(A)
+		elif(key == '2'):
+			buzz_Freq(B)
+		elif(key ==	'3'):
+			buzz_Freq(C)
+		elif(key == '4'):
+			buzz_Freq(D)
+		elif(key == '5'):
+			buzz_Freq(E)
+		elif(key == '6'):
+			buzz_Freq(F)
+		elif(key == '7'):
+			buzz_Freq(G)
+		elif(key == '8'):
+			buzz_Freq(H)
+		else:
+			exit(0)
+
+except KeyboardInterrupt:
+	GPIO.cleanup()

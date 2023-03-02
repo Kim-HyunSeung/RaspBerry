@@ -1,0 +1,43 @@
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+
+digit = {5:0b01011011,6:0b01011111,7:0b01110000,8:0b01111111,9:0b01110011}
+
+seven = {0:0b01111110, 1:0b00110000, 2:0b01101101, 3:0b01111001, 4:0b00110011, 5:0b01011011, 6:0b01011111, 7:0b01110000, 8:0b01111111, 9:0b01110011}
+
+Pins = {'a': 17,'b': 27,'c': 22,'d': 10,'e': 9,'f': 11,'g': 0}
+
+def renderChar(c):
+
+	val = digit[c]
+
+	GPIO.output(list(Pins.values()),GPIO.HIGH)
+
+	for k,v in seven.items():
+		if val&v == v:
+			GPIO.output(Pins[k],GPIO.HIGH)
+
+try:
+
+	GPIO.setup(list(Pins.values()),GPIO.OUT)
+
+	GPIO.output(list(Pins.values()),GPIO.HIGH)
+
+	val = 0
+
+	while True:
+
+		renderChar(val)
+
+		val = 0 if val == 9 else (val +1)
+
+		time.sleep(1)
+
+except KeyboardInterrupt:
+	print("g")
+
+finally:
+	GPIO.cleanup()	
+

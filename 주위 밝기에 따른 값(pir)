@@ -1,0 +1,22 @@
+import RPi.GPIO as GPIO
+import time
+
+pirPin = 24
+ledPin = 23
+GPIO.setmode(GPIO.BCM) 
+GPIO.setup(pirPin,GPIO.IN)
+GPIO.setup(ledPin,GPIO.OUT)
+
+try:
+	while True:
+		if GPIO.input(pirPin) == GPIO.HIGH:
+			print("detected")
+			GPIO.output(ledPin,GPIO.HIGH)
+			time.sleep(0.3)
+		else:
+			print("off")
+			GPIO.output(ledPin,GPIO.LOW)
+			time.sleep(0.3)
+
+except KeyboardInterrupt:
+	GPIO.cleanup()
